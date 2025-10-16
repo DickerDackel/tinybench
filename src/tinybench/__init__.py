@@ -57,14 +57,12 @@ def bench(*fns: Callable, runs: int = 5, number: int = 1_000_000) -> None:
             timings.append(timeit(fn, number=number))
             print(f'{i}: {timings[-1]}')
 
-        inner_timings = (fn.__name__, mean(timings), median(timings), stdev(timings))
-        outer_timings.append((inner_timings))
-
+        outer_timings.append((fn.__name__, mean(timings), median(timings)))
         summary.append(
-            f'{inner_timings[0]}: '
-            f'mean={inner_timings[1]:.5f}  '
-            f'median={inner_timings[2]:.5f}  '
-            f'stdev={inner_timings[3]:.5f}')
+            f'{outer_timings[-1][0]}: '
+            f'mean={outer_timings[-1][1]:.5f}  '
+            f'median={outer_timings[-1][2]:.5f}  '
+            f'stdev={stdev(timings):.5f}')
         print(summary[-1], end='\n\n')
 
     ordered_means = sorted(outer_timings, key=lambda x: x[1])
